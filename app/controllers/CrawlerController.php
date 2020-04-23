@@ -9,6 +9,13 @@ class CrawlerController extends \Phalcon\Mvc\Controller
     public $howManyPages = 2;
     public function indexAction()
     {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        if($requestMethod != 'POST'){
+            $this->success = false;
+            $this->message = "Seems {$requestMethod}, only POST request is allowed";
+            $this->status = 404;
+            return $this->apiResponse();
+        }
         $url = $_REQUEST['url'] ?? null;
         if(!$url || $url == null){
             $payload = json_decode(file_get_contents('php://input'));
